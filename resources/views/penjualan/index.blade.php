@@ -46,7 +46,7 @@
                     <td>{{ $item->nama_pelanggan }}</td>
                     <td>{{ $item->nama_produk }}</td>
                     <td>Rp {{ number_format((float) $item->total, 0, ',', '.') }}</td>
-                    <td><span class="badge">{{ $item->status }}</span></td>
+                    <td><span class="badge badge-{{ strtolower($item->status) }}">{{ $item->status }}</span></td>
                     <td>
                         <div class="actions">
                             <a class="btn" href="{{ route('penjualan.show', $item) }}">Detail</a>

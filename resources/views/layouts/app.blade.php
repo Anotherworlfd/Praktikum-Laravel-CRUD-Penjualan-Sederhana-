@@ -59,6 +59,9 @@
         .error { color: #b91c1c; font-size: 13px; margin-top: 5px; }
         .metric { font-size: 28px; font-weight: 700; }
         .badge { padding: 5px 9px; border-radius: 999px; background: #f3f4f6; font-size: 12px; }
+        .badge-selesai { background: #dcfce7; color: #166534; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-batal { background: #fee2e2; color: #991b1b; }
         @media (max-width: 700px) {
             .grid { grid-template-columns: 1fr; }
             .topbar { align-items: flex-start; gap: 12px; flex-direction: column; }
