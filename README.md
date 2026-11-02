@@ -6,53 +6,128 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+# Praktikum Laravel: CRUD Penjualan Sederhana
 
-## About Laravel
+Aplikasi web untuk mencatat transaksi penjualan, dibuat untuk Modul Praktikum Laravel Lanjutan. Fokusnya alur kerja Laravel: migration, Eloquent Model, Resource Controller, Route, dan Blade View.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fitur
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Tambah, lihat daftar, lihat detail, ubah, dan hapus transaksi (CRUD)
+- Validasi input di sisi server, dengan pesan error di form
+- Total transaksi dihitung otomatis di server (`jumlah × harga_satuan`)
+- Total omzet dari transaksi berstatus Selesai
+- Ringkasan jumlah transaksi per status (Selesai, Pending, Batal)
+- Badge warna berbeda untuk tiap status
+- Flash message setelah tambah, ubah, dan hapus
+- Tampilan responsif tanpa framework CSS
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Teknologi
 
-## Learning Laravel
+- Laravel 13.x
+- PHP 8.3+
+- MySQL / MariaDB
+- Laragon (lingkungan lokal)
+- Blade (tanpa starter kit)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Struktur Data
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Tabel `penjualan`:
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+| Kolom | Tipe | Keterangan |
+|---|---|---|
+| id | bigint | Primary key |
+| kode_transaksi | string(30), unique | Contoh: TRX-001 |
+| tanggal | date | Tanggal transaksi |
+| nama_pelanggan | string(100) | Nama pelanggan |
+| nama_produk | string(120) | Nama barang |
+| jumlah | unsigned integer | Jumlah unit |
+| harga_satuan | decimal(12,2) | Harga per unit |
+| total | decimal(14,2) | Dihitung server |
+| status | string(20) | Selesai, Pending, atau Batal |
+| catatan | text, nullable | Catatan tambahan |
+| created_at, updated_at | timestamp | Dikelola Laravel |
 
-## Agentic Development
+## Struktur File Utama
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+app/Models/Penjualan.php
+app/Http/Controllers/PenjualanController.php
+database/migrations/..._create_penjualan_table.php
+routes/web.php
+resources/views/layouts/app.blade.php
+resources/views/penjualan/index.blade.php
+resources/views/penjualan/create.blade.php
+resources/views/penjualan/edit.blade.php
+resources/views/penjualan/show.blade.php
+resources/views/penjualan/_form.blade.php
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Route
 
-## Contributing
+| Nama | Method | URL |
+|---|---|---|
+| penjualan.index | GET | /penjualan |
+| penjualan.create | GET | /penjualan/create |
+| penjualan.store | POST | /penjualan |
+| penjualan.show | GET | /penjualan/{penjualan} |
+| penjualan.edit | GET | /penjualan/{penjualan}/edit |
+| penjualan.update | PUT/PATCH | /penjualan/{penjualan} |
+| penjualan.destroy | DELETE | /penjualan/{penjualan} |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Cara Menjalankan
 
-## Code of Conduct
+1. Clone repository dan masuk ke foldernya.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   ```
+   git clone https://github.com/USERNAME/praktikum-laravel.git
+   cd praktikum-laravel
+   ```
 
-## Security Vulnerabilities
+2. Pasang dependensi dan siapkan file environment.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```
+   composer install
+   copy .env.example .env
+   php artisan key:generate
+   ```
 
-## License
+3. Buat database kosong di MySQL.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   ```sql
+   CREATE DATABASE penjualan_laravel
+   CHARACTER SET utf8mb4
+   COLLATE utf8mb4_unicode_ci;
+   ```
+
+4. Atur koneksi database di `.env`.
+
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=penjualan_laravel
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+5. Jalankan migration lalu server.
+
+   ```
+   php artisan migrate
+   php artisan serve
+   ```
+
+6. Buka `http://127.0.0.1:8000`. Halaman akan diarahkan ke `/penjualan`.
+
+
+
+## Pengembangan Mandiri
+
+- Ringkasan jumlah transaksi Selesai, Pending, dan Batal
+- Badge status dengan warna berbeda
+
+
+
+## Created by
+
+Muhammad Taqiy Mumtaz (109062500135)
