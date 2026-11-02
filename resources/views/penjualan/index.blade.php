@@ -16,6 +16,15 @@
     <div class="metric">Rp {{ number_format((float) $totalOmzet, 0, ',', '.') }}</div>
 </div>
 
+<div class="grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px;">
+    @foreach (['Selesai', 'Pending', 'Batal'] as $status)
+        <div class="card" style="margin-bottom: 0;">
+            <div class="muted">{{ $status }}</div>
+            <div class="metric">{{ $ringkasan[$status] ?? 0 }}</div>
+        </div>
+    @endforeach
+</div>
+
 <div class="card">
     <table>
         <thead>

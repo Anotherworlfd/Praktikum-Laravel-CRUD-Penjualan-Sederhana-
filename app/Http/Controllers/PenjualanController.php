@@ -16,8 +16,11 @@ class PenjualanController extends Controller
             ->get();
 
         $totalOmzet = Penjualan::where('status', 'Selesai')->sum('total');
+        $ringkasan = Penjualan::selectRaw('status, COUNT(*) as jumlah')
+            ->groupBy('status')
+            ->pluck('jumlah', 'status');
 
-        return view('penjualan.index', compact('penjualan', 'totalOmzet'));
+    return view('penjualan.index', compact('penjualan', 'totalOmzet', 'ringkasan'));
     }
 
     public function create()
